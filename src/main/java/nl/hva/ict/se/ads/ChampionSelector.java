@@ -17,7 +17,7 @@ public class ChampionSelector {
         for (i = 1; i < archers.size(); i++) {
             Archer archer = archers.get(i);
             j = i;
-            while ((j > 0) && (archers.get(j - 1).getTotalScore() > archergetTotalScore())) {
+            while ((j > 0) && (archers.get(j - 1).getTotalScore() > archer.getTotalScore())) {
                 archers.set(j, archers.get(j - 1));
                 j--;
             }
