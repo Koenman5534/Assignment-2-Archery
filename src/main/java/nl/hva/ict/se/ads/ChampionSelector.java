@@ -8,6 +8,9 @@ import java.util.List;
  * Given a list of Archer's this class can be used to sort the list using one of three sorting algorithms.
  */
 public class ChampionSelector {
+
+    private static ArcherComparator archerComparator = new ArcherComparator();
+
     /**
      * This method uses either selection sort or insertion sort for sorting the archers.
      */
@@ -17,7 +20,7 @@ public class ChampionSelector {
         for (i = 1; i < archers.size(); i++) {
             Archer archer = archers.get(i);
             j = i;
-            while ((j > 0) && (archers.get(j - 1).getTotalScore() > archer.getTotalScore())) {
+            while ((j > 0) && (archerComparator.compare(archers.get(j - 1), archer) < 0)) {
                 archers.set(j, archers.get(j - 1));
                 j--;
             }
