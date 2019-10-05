@@ -25,10 +25,10 @@ public class ArcherComparator implements Comparator<Archer> {
             {
                 if (o1.getId() < o2.getId())
                 {
-                    return -1;
+                    return 1;
                 }
 
-                return 1;
+                return -1;
             }
 
             return 1;
