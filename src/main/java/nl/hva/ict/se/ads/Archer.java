@@ -20,7 +20,7 @@ public class Archer {
 
     private int[][] scoreCard;
 
-    public static final int INITIAL_ID = 135788;
+    static final int INITIAL_ID = 135788;
     /**
      * Constructs a new instance of bowman and assigns a unique ID to the instance. The ID is not allowed to ever
      * change during the lifetime of the instance! For this you need to use the correct Java keyword.Each new instance
@@ -69,7 +69,7 @@ public class Archer {
      * @param nrOfArchers the number of archers in the list.
      * @return
      */
-    public static List<Archer> generateArchers(int nrOfArchers) {
+    static List<Archer> generateArchers(int nrOfArchers) {
         List<Archer> archers = new ArrayList<>(nrOfArchers);
         for (int i = 0; i < nrOfArchers; i++) {
             Archer archer = new Archer(Names.nextFirstName(), Names.nextSurname());
@@ -125,7 +125,7 @@ public class Archer {
         return Math.max(min, randomizer.nextInt(11));
     }
 
-    public void setId(int id) {
+    private void setId(int id) {
         if (this.id == 0)
         {
             this.id = id;
