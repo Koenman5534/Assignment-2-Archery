@@ -35,39 +35,28 @@ public class ChampionSelector {
     /**
      * This method uses quick sort for sorting the archers.
      */
-    public static List<Archer> quickSort(List<Archer> archers, Comparator<Archer> scoringScheme)
+    public static List<Archer> quickSort(List<Archer> archers, Comparator<Archer> scoringScheme, int from, int to)
     {
-        quickSort(archers, 0, archers.size() - 1);
-        return archers;
-    }
-
-    public static void quickSort(List<Archer> archers, int from, int to)
-    {
-        if (from < to)
-        {
+        if (from < to) {
             int pivot = from;
             int left = from + 1;
             int right = to;
-            int pivotWeightedScore = Archer.calculateWeightedScore(archers.get(pivot));
-            while (left <= right)
-            {
-                while (left <= to && pivotWeightedScore >= Archer.calculateWeightedScore(archers.get(left)))
-                {
+            while (left <= right) {
+                while (left <= to && scoringScheme.compare(archers.get(pivot), archers.get(left)) > -1) {
                     left++;
                 }
-                while(right > from && pivotWeightedScore < Archer.calculateWeightedScore(archers.get(right)))
-                {
+                while (right > from && scoringScheme.compare(archers.get(pivot), archers.get(right)) < 0) {
                     right--;
                 }
-                if (left < right)
-                {
+                if (left < right) {
                     Collections.swap(archers, left, right);
                 }
             }
-            Collections.swap(archers, pivot, left - 1);
-            quickSort(archers, from, right - 1);
-            quickSort(archers, right + 1, to);
+            Collections.swap(archers, pivot, left-1);
+            quickSort(archers, scoringScheme, from, right-1);
+            quickSort(archers, scoringScheme, right+1, to);
         }
+        return archers;
     }
 
     /**
