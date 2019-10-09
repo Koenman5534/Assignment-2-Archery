@@ -28,6 +28,7 @@ public class ChampionSelector {
             archers.set(j, archer);
         }
 
+        Collections.reverse(archers);
         return archers;
     }
 
