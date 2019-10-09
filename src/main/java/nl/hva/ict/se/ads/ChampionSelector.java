@@ -1,5 +1,6 @@
 package nl.hva.ict.se.ads;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -33,8 +34,39 @@ public class ChampionSelector {
     /**
      * This method uses quick sort for sorting the archers.
      */
-    public static List<Archer> quickSort(List<Archer> archers, Comparator<Archer> scoringScheme) {
+    public static List<Archer> quickSort(List<Archer> archers, Comparator<Archer> scoringScheme)
+    {
+        quickSort(archers, 0, archers.size() - 1);
         return archers;
+    }
+
+    public static void quickSort(List<Archer> archers, int from, int to)
+    {
+        if (from < to)
+        {
+            int pivot = from;
+            int left = from + 1;
+            int right = to;
+            int pivotWeightedScore = Archer.calculateWeightedScore(archers.get(pivot));
+            while (left <= right)
+            {
+                while (left <= to && pivotWeightedScore >= Archer.calculateWeightedScore(archers.get(left)))
+                {
+                    left++;
+                }
+                while(right > from && pivotWeightedScore < Archer.calculateWeightedScore(archers.get(right)))
+                {
+                    right--;
+                }
+                if (left < right)
+                {
+                    Collections.swap(archers, left, right);
+                }
+            }
+            Collections.swap(archers, pivot, left - 1);
+            quickSort(archers, from, right - 1);
+            quickSort(archers, right + 1, to);
+        }
     }
 
     /**
@@ -54,4 +86,28 @@ public class ChampionSelector {
         return null;
     }
 
+    private int partition(int[] arr, int low, int high)
+    {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++)
+        {
+            if (arr[j] < pivot)
+            {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+
+        swap(arr, i+1, high);
+
+        return i + 1;
+    }
+
+    private void swap(int[] arr, int i, int j)
+    {
+        int t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
+    }
 }

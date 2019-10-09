@@ -1,6 +1,8 @@
 package nl.hva.ict.se.ads;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.lang.Math.*;
 
 /**
  * Holds the name, archer-id and the points scored for 30 arrows.
@@ -64,6 +66,32 @@ public class Archer {
     }
 
     /**
+     * The weighted score incorporates the skill of the archer by awarding
+     * extra points for a high number of good shots and by giving a penalty for misses.
+     * The weighted score awards 1 extra point per shot, unless the shot missed, in
+     * which case the archer receives a 7 point penalty.
+     *
+     * @param a
+     * @return
+     */
+    public static int calculateWeightedScore(Archer a)
+    {
+        int wScore = 0;
+        int[][] scoreCard = a.getScoreCard();
+        for (int i = 0; i < scoreCard.length; i++) {
+            for (int j = 0; j < scoreCard[i].length; j++) {
+                if (scoreCard[i][j] == 0) // penalty
+                {
+                    wScore -= 7;
+                }
+                wScore += scoreCard[i][j] + 1; // extra points
+            }
+        }
+
+        return wScore;
+    }
+
+    /**
      * This methods creates a List of archers.
      *
      * @param nrOfArchers the number of archers in the list.
@@ -100,7 +128,49 @@ public class Archer {
      */
     public static Iterator<Archer> generateArchers(long nrOfArchers)
     {
-        return null;
+        return new IterableArcher(nrOfArchers);
+    }
+
+    static class IterableArcher implements Iterator<Archer>
+    {
+        private long nrOfArchers;
+        private long definedArchers = 0;
+        private List<Archer> archers;
+
+        public IterableArcher(long nrOfArchers)
+        {
+            this.nrOfArchers = nrOfArchers;
+            this.archers = new ArrayList<Archer>();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return definedArchers < nrOfArchers;
+        }
+
+        @Override
+        public Archer next() {
+            Archer a = new Archer(Names.nextFirstName(), Names.nextSurname());
+            Archer archer = new Archer(Names.nextFirstName(), Names.nextSurname());
+            // Set the first archer ID to the defined starting ID. Add 1 for every subsequent archer
+            if (definedArchers == 0)
+            {
+                archer.setId(INITIAL_ID);
+            }
+            else
+            {
+                archer.setId(INITIAL_ID + Math.toIntExact(definedArchers));
+            }
+            letArcherShoot(archer, nrOfArchers % 100 == 0);
+            definedArchers++;
+            archers.add(a);
+            return a;
+        }
+
+        @Override
+        public void remove() {
+            archers.remove(archers.size());
+        }
     }
 
     public int getId() {
