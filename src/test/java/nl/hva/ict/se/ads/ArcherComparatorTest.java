@@ -42,8 +42,10 @@ public class ArcherComparatorTest {
     void testNormalCase()
     {
         // normal case is where one archer has a higher score than the other
-        int[][] archer2Score = definedScoreCard;
-        archer2Score[1][1] = definedScoreCard[1][1]+ 1;
+        int[][] archer2Score = new int[3][];
+        archer2Score[0] = definedScoreCard[0];
+        archer2Score[1] = definedScoreCard[1];
+        archer2Score[2] = new int[]{9,9,9};
 
         archer2.setScoreCard(archer2Score);
 
