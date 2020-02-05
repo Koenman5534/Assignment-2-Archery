@@ -26,7 +26,7 @@ public class ExtendedChampionSelectorTest extends ChampionSelectorTest {
         assertEquals(sortedArchersCollection, sortedArchersSelIns);
     }
 
-    @Test
+
     void benchmarkSortingAlgorithms()
     {
         Comparator<Archer> c = new ArcherComparator();

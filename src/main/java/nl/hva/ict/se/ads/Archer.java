@@ -23,6 +23,7 @@ public class Archer {
     private int[][] scoreCard;
 
     static final int INITIAL_ID = 135788;
+    static int LAST_ID = 0;
     /**
      * Constructs a new instance of bowman and assigns a unique ID to the instance. The ID is not allowed to ever
      * change during the lifetime of the instance! For this you need to use the correct Java keyword.Each new instance
@@ -92,29 +93,54 @@ public class Archer {
     }
 
     /**
+     * Generates the next archer ID that should be given out based on the initial archer ID and
+     * the last ID that was given out
+     *
+     * @return the next archer ID to be given out
+     */
+    private static int generateNextArcherId()
+    {
+        if (LAST_ID == 0)
+        {
+            LAST_ID = INITIAL_ID;
+            return INITIAL_ID;
+        }
+        else
+        {
+            LAST_ID++;
+            return LAST_ID;
+        }
+    }
+
+    /**
      * This methods creates a List of archers.
      *
      * @param nrOfArchers the number of archers in the list.
-     * @return
+     * @return a list of the created archers
      */
     static List<Archer> generateArchers(int nrOfArchers) {
         List<Archer> archers = new ArrayList<>(nrOfArchers);
         for (int i = 0; i < nrOfArchers; i++) {
-            Archer archer = new Archer(Names.nextFirstName(), Names.nextSurname());
-            // Set the first archer ID to the defined starting ID. Add 1 for every subsequent archer
-            if (i == 0)
-            {
-                archer.setId(INITIAL_ID);
-            }
-            else
-            {
-                archer.setId(INITIAL_ID + i);
-            }
-            letArcherShoot(archer, nrOfArchers % 100 == 0);
+            Archer archer = generateArcher(nrOfArchers % 100 == 0);
             archers.add(archer);
         }
         return archers;
 
+    }
+
+    /**
+     * Generates a new archer. This is moved to a separate method to keep the logic the same for both
+     * List and Iterator implementations.
+     *
+     * @param isBeginner indicates if this archer is beginner and should use the different scoring scheme
+     * @return the generated archer
+     */
+    private static Archer generateArcher(boolean isBeginner)
+    {
+        Archer archer = new Archer(Names.nextFirstName(), Names.nextSurname());
+        archer.setId(generateNextArcherId());
+        letArcherShoot(archer, isBeginner);
+        return archer;
     }
 
     /**
@@ -140,7 +166,7 @@ public class Archer {
         public IterableArcher(long nrOfArchers)
         {
             this.nrOfArchers = nrOfArchers;
-            this.archers = new ArrayList<Archer>();
+            this.archers = new ArrayList<>();
         }
 
         @Override
@@ -150,20 +176,9 @@ public class Archer {
 
         @Override
         public Archer next() {
-            Archer a = new Archer(Names.nextFirstName(), Names.nextSurname());
-            Archer archer = new Archer(Names.nextFirstName(), Names.nextSurname());
-            // Set the first archer ID to the defined starting ID. Add 1 for every subsequent archer
-            if (definedArchers == 0)
-            {
-                archer.setId(INITIAL_ID);
-            }
-            else
-            {
-                archer.setId(INITIAL_ID + Math.toIntExact(definedArchers));
-            }
-            letArcherShoot(archer, nrOfArchers % 100 == 0);
-            definedArchers++;
+            Archer a = generateArcher(nrOfArchers % 100 == 0);
             archers.add(a);
+            definedArchers++;
             return a;
         }
 
